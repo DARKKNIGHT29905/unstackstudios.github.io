@@ -10,13 +10,14 @@
         tailwind.config = {
             theme: {
                 extend: {
+                    // Tailwind colors will now reference CSS variables
                     colors: {
-                        'primary-green': '#2fb563',
-                        'primary-orange': '#ffae34',
-                        'white': '#ffffff',
-                        'dark-bg': '#0a0a0a',
-                        'accent-dark': '#1a1a1a',
-                        'text-gray': '#a0a0a0',
+                        'primary-green': 'var(--color-primary-green)',
+                        'primary-orange': 'var(--color-primary-orange)',
+                        'white': 'var(--color-white)',
+                        'dark-bg': 'var(--color-dark-bg)',
+                        'accent-dark': 'var(--color-accent-dark)',
+                        'text-gray': 'var(--color-text-gray)',
                     },
                     fontFamily: {
                         inter: ['Inter', 'sans-serif'],
@@ -25,7 +26,7 @@
                         fadeInUp: {
                             '0%': { opacity: '0', transform: 'translateY(30px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
+                        }, // Removed the extra comma here
                         float: {
                             '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
                             '50%': { transform: 'translateY(-20px) rotate(180deg)' },
@@ -37,6 +38,22 @@
                         particleFall: {
                             '0%': { transform: 'translateY(0px)', opacity: '0.3' },
                             '100%': { transform: 'translateY(100vh)', opacity: '0' },
+                        },
+                        slideInLeft: {
+                            '0%': { opacity: '0', transform: 'translateX(-50px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        },
+                        slideInRight: {
+                            '0%': { opacity: '0', transform: 'translateX(50px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        },
+                        scaleIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.9)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        },
+                        glowButton: {
+                            '0%, 100%': { 'box-shadow': '0 0 0 0 rgba(47, 181, 99, 0.7)' },
+                            '50%': { 'box-shadow': '0 0 20px 5px rgba(47, 181, 99, 0.4)' },
                         }
                     },
                     animation: {
@@ -44,6 +61,10 @@
                         float: 'float 6s ease-in-out infinite',
                         pulseGreen: 'pulseGreen 2s infinite',
                         particleFall: 'particleFall var(--duration) ease-out forwards',
+                        slideInLeft: 'slideInLeft 0.8s ease-out forwards',
+                        slideInRight: 'slideInRight 0.8s ease-out forwards',
+                        scaleIn: 'scaleIn 0.8s ease-out forwards',
+                        glowButton: 'glowButton 2s infinite ease-in-out',
                     }
                 }
             }
@@ -51,13 +72,71 @@
     </script>
     <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tone.js CDN for sound effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
     <style>
+        /* CSS Variables for Theme Switching */
+        :root {
+            /* Dark Mode Colors */
+            --color-primary-green: #2fb563;
+            --color-primary-orange: #ffae34;
+            --color-white: #ffffff;
+            --color-dark-bg: #0a0a0a;
+            --color-accent-dark: #1a1a1a;
+            --color-text-gray: #a0a0a0;
+
+            /* Mapped variables for easier use */
+            --bg-color: var(--color-dark-bg);
+            --accent-bg-color: var(--color-accent-dark);
+            --text-color: var(--color-white);
+            --secondary-text-color: var(--color-text-gray);
+            --header-bg-opacity: 0.95;
+            --border-color: rgba(255, 255, 255, 0.1); /* light border for dark mode */
+            --gradient-start-hero: var(--color-primary-green);
+            --gradient-end-hero: var(--color-primary-orange);
+            --hero-bg-from: var(--color-dark-bg);
+            --hero-bg-to: var(--color-accent-dark);
+            --hero-pattern-color: rgba(47, 181, 99, 0.05); /* primary-green with opacity */
+            --box-shadow-color: rgba(47, 181, 99, 0.3); /* primary-green with opacity */
+            --cursor-color: #2fb563; /* primary-green */
+            --card-border-color: rgba(47, 181, 99, 0.2); /* primary-green with opacity */
+            --hover-card-border-color: rgba(47, 181, 99, 0.8); /* primary-green with opacity */
+        }
+
+        /* Light Mode Overrides */
+        body.light-mode {
+            --color-primary-green: #2fb563; /* Keep green */
+            --color-primary-orange: #ffae34; /* Keep orange */
+            --color-white: #1a1a1a; /* Dark text for main content */
+            --color-dark-bg: #f8f8f8; /* Light background */
+            --color-accent-dark: #eeeeee; /* Slightly darker light background */
+            --color-text-gray: #555555; /* Darker gray for secondary text */
+
+            --bg-color: var(--color-dark-bg);
+            --accent-bg-color: var(--color-accent-dark);
+            --text-color: var(--color-white);
+            --secondary-text-color: var(--color-text-gray);
+            --header-bg-opacity: 0.9;
+            --border-color: rgba(0, 0, 0, 0.1); /* darker border for light mode */
+            --gradient-start-hero: var(--color-primary-green);
+            --gradient-end-hero: var(--color-primary-orange);
+            --hero-bg-from: var(--color-dark-bg);
+            --hero-bg-to: var(--color-accent-dark);
+            --hero-pattern-color: rgba(47, 181, 99, 0.1); /* primary-green with opacity */
+            --box-shadow-color: rgba(47, 181, 99, 0.3); /* primary-green with opacity */
+            --cursor-color: #2fb563; /* primary-green */
+            --card-border-color: rgba(0, 0, 0, 0.1); /* light border for light mode */
+            --hover-card-border-color: rgba(0, 0, 0, 0.3); /* darker hover border */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a; /* dark-bg */
-            color: #ffffff; /* white */
+            background-color: var(--bg-color);
+            color: var(--text-color);
             overflow-x: hidden;
             scroll-behavior: smooth;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%232fb563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mouse-pointer-2"><path d="m4 4 7.07 17 2.51-7.31L17 11.07Z"/><path d="m11 11 3 3"/></svg>') 0 0, pointer;
+            transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
         }
 
         /* Custom scroll-animate class for JS controlled animations */
@@ -74,152 +153,289 @@
 
         /* Specific styles for gradient text */
         .gradient-text-green-white {
-            background: linear-gradient(135deg, var(--tw-colors-primary-green), var(--tw-colors-white));
+            background: linear-gradient(135deg, var(--gradient-start-hero), var(--gradient-end-hero));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        /* Particle animation styling */
-        .particle {
+        /* Particle animation styling - now SVG based */
+        .particle-svg {
             position: fixed;
-            width: 2px;
-            height: 2px;
-            background-color: var(--tw-colors-primary-green);
-            border-radius: 50%;
             opacity: 0.3;
             pointer-events: none;
             z-index: 1;
+            fill: var(--color-primary-green); /* Default fill for particles */
+        }
+
+        /* Enhanced hover effects for navigation links */
+        .group:hover .group-hover\:w-full {
+            width: 100%;
+        }
+
+        /* Card hover effects for services */
+        .service-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px var(--box-shadow-color);
+        }
+
+        /* Hero section background pattern */
+        .hero-section {
+            background: linear-gradient(to bottom, var(--hero-bg-from), var(--hero-bg-to));
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at center, var(--hero-pattern-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        /* Parallax effect for floating elements in hero */
+        .parallax-float {
+            transition: transform 0.1s ease-out, fill 0.3s ease, stroke 0.3s ease, opacity 0.3s ease; /* Added fill, stroke, opacity for hover */
+        }
+
+        /* Hover effect for floating SVGs */
+        .parallax-float:hover {
+            fill: var(--color-primary-orange); /* Change fill color on hover */
+            stroke: var(--color-primary-orange); /* Change stroke color on hover */
+            opacity: 0.6; /* Increase opacity on hover */
+            transform: scale(1.1) !important; /* Slightly larger on hover, !important to override parallax JS */
         }
     </style>
 </head>
 <body class="bg-dark-bg text-white font-inter">
 
     <!-- Header -->
-    <header class="fixed top-0 w-full bg-dark-bg bg-opacity-95 backdrop-blur-xl z-50 transition-all duration-300 ease-in-out py-4 shadow-lg">
+    <header class="fixed top-0 w-full bg-opacity-95 backdrop-blur-xl z-50 transition-all duration-300 ease-in-out py-4 shadow-lg" style="background-color: var(--bg-color); color: var(--text-color);">
         <nav class="container mx-auto flex justify-between items-center px-6 lg:px-8 max-w-7xl">
-            <a href="index.html" class="text-3xl font-extrabold text-primary-green transition-transform duration-300 hover:scale-105">Unstack Studio</a>
+            <a href="index.html" class="text-3xl font-extrabold transition-transform duration-300 hover:scale-105" style="color: var(--color-primary-green);">Unstack Studio</a>
             <ul class="hidden md:flex space-x-8">
-                <li><a href="#home" class="text-white hover:text-primary-green font-medium relative group">Home<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-green transition-all duration-300 group-hover:w-full"></span></a></li>
-                <li><a href="#services" class="text-white hover:text-primary-green font-medium relative group">Our Work<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-green transition-all duration-300 group-hover:w-full"></span></a></li>
-                <li><a href="sports-pass.html" class="text-white hover:text-primary-orange font-medium relative group">Sports Pass<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-orange transition-all duration-300 group-hover:w-full"></span></a></li>
+                <li><a href="#home" class="font-medium relative group" style="color: var(--text-color);">Home<span class="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full" style="background-color: var(--color-primary-green);"></span></a></li>
+                <li><a href="#services" class="font-medium relative group" style="color: var(--text-color);">Our Work<span class="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full" style="background-color: var(--color-primary-green);"></span></a></li>
+                <li><a href="#testimonials" class="font-medium relative group" style="color: var(--text-color);">Testimonials<span class="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full" style="background-color: var(--color-primary-green);"></span></a></li>
+                <li><a href="sports-pass.html" class="font-medium relative group" style="color: var(--color-primary-orange);">Sports Pass<span class="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full" style="background-color: var(--color-primary-orange);"></span></a></li>
             </ul>
-            <!-- Mobile Menu Button (Hamburger) -->
-            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </button>
+            <div class="flex items-center space-x-4">
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" class="p-2 rounded-full focus:outline-none transition-colors duration-300" style="background-color: var(--accent-bg-color); color: var(--text-color);">
+                    <!-- Sun Icon for Light Mode -->
+                    <svg id="sun-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h1M3 12h1m15.325-7.775l-.707.707M4.343 19.071l-.707.707m12.728 0l-.707-.707M4.343 4.343l-.707-.707"></path>
+                    </svg>
+                    <!-- Moon Icon for Dark Mode -->
+                    <svg id="moon-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                </button>
+                <!-- Mobile Menu Button (Hamburger) -->
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-full focus:outline-none" style="background-color: var(--accent-bg-color); color: var(--text-color);">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
         </nav>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-dark-bg bg-opacity-90 py-4">
+        <div id="mobile-menu" class="hidden md:hidden py-4" style="background-color: var(--bg-color);">
             <ul class="flex flex-col items-center space-y-4">
-                <li><a href="#home" class="text-white hover:text-primary-green font-medium text-lg py-2 block">Home</a></li>
-                <li><a href="#services" class="text-white hover:text-primary-green font-medium text-lg py-2 block">Our Work</a></li>
-                <li><a href="sports-pass.html" class="text-white hover:text-primary-orange font-medium text-lg py-2 block">Sports Pass</a></li>
+                <li><a href="#home" class="font-medium text-lg py-2 block" style="color: var(--text-color);">Home</a></li>
+                <li><a href="#services" class="font-medium text-lg py-2 block" style="color: var(--text-color);">Our Work</a></li>
+                <li><a href="#testimonials" class="font-medium text-lg py-2 block" style="color: var(--text-color);">Testimonials</a></li>
+                <li><a href="sports-pass.html" class="font-medium text-lg py-2 block" style="color: var(--color-primary-orange);">Sports Pass</a></li>
             </ul>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section id="home" class="relative h-screen flex items-center justify-center bg-gradient-to-br from-dark-bg to-accent-dark overflow-hidden">
-        <!-- Floating Elements for Animation -->
-        <div class="absolute top-1/4 left-1/4 w-24 h-24 bg-primary-green rounded-full opacity-10 animate-float" style="animation-delay: 0s;"></div>
-        <div class="absolute bottom-1/3 right-1/4 w-32 h-32 bg-primary-orange rounded-full opacity-10 animate-float" style="animation-delay: 2s;"></div>
-        <div class="absolute top-1/2 left-1/2 w-20 h-20 bg-white rounded-full opacity-5 animate-float" style="animation-delay: 4s;"></div>
+    <section id="home" class="hero-section relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Floating Elements for Animation - now network-themed SVG shapes -->
+        <svg class="absolute top-1/4 left-1/4 w-24 h-24 opacity-10 animate-float parallax-float" data-parallax-strength="0.05" style="animation-delay: 0s; fill: var(--color-primary-green); stroke: var(--color-primary-green);" viewBox="0 0 100 100" aria-hidden="true">
+            <rect x="20" y="20" width="60" height="60" rx="10" ry="10"></rect>
+            <circle cx="50" cy="50" r="10" fill="var(--color-white)"></circle>
+            <line x1="20" y1="20" x2="80" y2="80" stroke="currentColor" stroke-width="5"></line>
+            <line x1="80" y1="20" x2="20" y2="80" stroke="currentColor" stroke-width="5"></line>
+        </svg>
+        <svg class="absolute bottom-1/3 right-1/4 w-32 h-32 opacity-10 animate-float parallax-float" data-parallax-strength="0.08" style="animation-delay: 2s; fill: var(--color-primary-orange); stroke: var(--color-primary-orange);" viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M10 50 L40 10 L60 10 L90 50 L60 90 L40 90 Z" stroke="currentColor" stroke-width="5" fill="none"></path>
+            <circle cx="50" cy="50" r="8" fill="var(--color-white)"></circle>
+            <circle cx="40" cy="10" r="5" fill="var(--color-white)"></circle>
+            <circle cx="60" cy="10" r="5" fill="var(--color-white)"></circle>
+            <circle cx="90" cy="50" r="5" fill="var(--color-white)"></circle>
+            <circle cx="60" cy="90" r="5" fill="var(--color-white)"></circle>
+            <circle cx="40" cy="90" r="5" fill="var(--color-white)"></circle>
+            <circle cx="10" cy="50" r="5" fill="var(--color-white)"></circle>
+        </svg>
+        <svg class="absolute top-1/2 left-1/2 w-20 h-20 opacity-5 animate-float parallax-float" data-parallax-strength="0.03" style="animation-delay: 4s; fill: var(--color-white); stroke: var(--color-white);" viewBox="0 0 100 100" aria-hidden="true">
+            <line x1="10" y1="10" x2="90" y2="10" stroke="currentColor" stroke-width="5"></line>
+            <line x1="10" y1="30" x2="90" y2="30" stroke="currentColor" stroke-width="5"></line>
+            <line x1="10" y1="50" x2="90" y2="50" stroke="currentColor" stroke-width="5"></line>
+            <line x1="10" y1="70" x2="90" y2="70" stroke="currentColor" stroke-width="5"></line>
+            <line x1="10" y1="90" x2="90" y2="90" stroke="currentColor" stroke-width="5"></line>
+            <line x1="30" y1="10" x2="30" y2="90" stroke="currentColor" stroke-width="5"></line>
+            <line x1="70" y1="10" x2="70" y2="90" stroke="currentColor" stroke-width="5"></line>
+        </svg>
         
         <div class="z-10 text-center max-w-4xl px-6">
             <h1 class="text-5xl md:text-7xl font-extrabold mb-4 gradient-text-green-white animate-fadeInUp" style="animation-delay: 0.2s;">Welcome to Unstack Studio</h1>
-            <p class="text-xl md:text-2xl text-text-gray mb-8 animate-fadeInUp" style="animation-delay: 0.4s;">Building Games, Apps, Brands & Big Ideas.</p>
-            <a href="#services" class="inline-block px-8 py-4 bg-primary-green text-dark-bg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 animate-fadeInUp" style="animation-delay: 0.6s;">
+            <p class="text-xl md:text-2xl mb-8 animate-fadeInUp" style="animation-delay: 0.4s; color: var(--secondary-text-color);">Building Games, Apps, Brands & Big Ideas.</p>
+            <a href="#services" class="inline-block px-8 py-4 font-bold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 animate-glowButton" style="animation-delay: 0.6s; background-color: var(--color-primary-green); color: var(--color-dark-bg);">
                 Explore Our Services
             </a>
         </div>
     </section>
 
     <!-- Our Services Section -->
-    <section id="services" class="py-20 bg-accent-dark">
+    <section id="services" class="py-20" style="background-color: var(--accent-bg-color);">
         <div class="container mx-auto px-6 lg:px-8 max-w-7xl">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 text-primary-green scroll-animate">Our Services</h2>
-            <p class="text-lg text-center text-text-gray mb-16 scroll-animate">Crafting digital experiences that stand out.</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 scroll-animate" style="color: var(--color-primary-green);">Our Services</h2>
+            <p class="text-lg text-center mb-16 scroll-animate delay-100" style="color: var(--secondary-text-color);">Crafting digital experiences that stand out.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Service Card 1: Game Development -->
-                <div class="bg-dark-bg p-8 rounded-xl shadow-lg border border-primary-green border-opacity-20 hover:border-opacity-80 transition-all duration-300 transform hover:-translate-y-2 scroll-animate">
-                    <div class="text-4xl mb-4 text-primary-orange">🎮</div>
-                    <h3 class="text-2xl font-semibold mb-3 text-white">Game Development</h3>
-                    <p class="text-text-gray">From concept to launch, we create immersive and engaging games for various platforms.</p>
+                <div class="p-8 rounded-xl shadow-lg border transition-all duration-300 transform hover:-translate-y-2 service-card scroll-animate delay-200" style="background-color: var(--bg-color); border-color: var(--card-border-color);">
+                    <div class="text-4xl mb-4" style="color: var(--color-primary-orange);">🎮</div>
+                    <h3 class="text-2xl font-semibold mb-3" style="color: var(--text-color);">Game Development</h3>
+                    <p style="color: var(--secondary-text-color);">From concept to launch, we create immersive and engaging games for various platforms.</p>
                 </div>
                 
                 <!-- Service Card 2: Mobile & Web App Development -->
-                <div class="bg-dark-bg p-8 rounded-xl shadow-lg border border-primary-green border-opacity-20 hover:border-opacity-80 transition-all duration-300 transform hover:-translate-y-2 scroll-animate" style="animation-delay: 0.1s;">
-                    <div class="text-4xl mb-4 text-primary-orange">📱</div>
-                    <h3 class="text-2xl font-semibold mb-3 text-white">Mobile & Web App Development</h3>
-                    <p class="text-text-gray">Building intuitive, high-performance applications for iOS, Android, and the web.</p>
+                <div class="p-8 rounded-xl shadow-lg border transition-all duration-300 transform hover:-translate-y-2 service-card scroll-animate delay-300" style="background-color: var(--bg-color); border-color: var(--card-border-color);">
+                    <div class="text-4xl mb-4" style="color: var(--color-primary-orange);">📱</div>
+                    <h3 class="text-2xl font-semibold mb-3" style="color: var(--text-color);">Mobile & Web App Development</h3>
+                    <p style="color: var(--secondary-text-color);">Building intuitive, high-performance applications for iOS, Android, and the web.</p>
                 </div>
                 
                 <!-- Service Card 3: Graphic Design -->
-                <div class="bg-dark-bg p-8 rounded-xl shadow-lg border border-primary-green border-opacity-20 hover:border-opacity-80 transition-all duration-300 transform hover:-translate-y-2 scroll-animate" style="animation-delay: 0.2s;">
-                    <div class="text-4xl mb-4 text-primary-orange">🎨</div>
-                    <h3 class="text-2xl font-semibold mb-3 text-white">Graphic Design</h3>
-                    <p class="text-text-gray">Stunning visual identities, UI/UX design, and branding that captures attention.</p>
+                <div class="p-8 rounded-xl shadow-lg border transition-all duration-300 transform hover:-translate-y-2 service-card scroll-animate delay-400" style="background-color: var(--bg-color); border-color: var(--card-border-color);">
+                    <div class="text-4xl mb-4" style="color: var(--color-primary-orange);">🎨</div>
+                    <h3 class="text-2xl font-semibold mb-3" style="color: var(--text-color);">Graphic Design</h3>
+                    <p style="color: var(--secondary-text-color);">Stunning visual identities, UI/UX design, and branding that captures attention.</p>
                 </div>
                 
                 <!-- Service Card 4: AR/VR (Coming Soon) -->
-                <div class="bg-dark-bg p-8 rounded-xl shadow-lg border border-primary-green border-opacity-20 hover:border-opacity-80 transition-all duration-300 transform hover:-translate-y-2 scroll-animate" style="animation-delay: 0.3s;">
-                    <div class="text-4xl mb-4 text-primary-orange">🕶️</div>
-                    <h3 class="text-2xl font-semibold mb-3 text-white">AR/VR (Coming Soon)</h3>
-                    <p class="text-text-gray">Exploring the future of immersive experiences with augmented and virtual reality solutions.</p>
+                <div class="p-8 rounded-xl shadow-lg border transition-all duration-300 transform hover:-translate-y-2 service-card scroll-animate delay-500" style="background-color: var(--bg-color); border-color: var(--card-border-color);">
+                    <div class="text-4xl mb-4" style="color: var(--color-primary-orange);">🕶️</div>
+                    <h3 class="text-2xl font-semibold mb-3" style="color: var(--text-color);">AR/VR (Coming Soon)</h3>
+                    <p style="color: var(--secondary-text-color);">Exploring the future of immersive experiences with augmented and virtual reality solutions.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Featured Project Section: Sports Pass -->
-    <section id="featured-project" class="py-20 bg-dark-bg">
+    <section id="featured-project" class="py-20" style="background-color: var(--bg-color);">
         <div class="container mx-auto px-6 lg:px-8 max-w-7xl flex flex-col lg:flex-row items-center gap-12">
-            <div class="lg:w-1/2 scroll-animate">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-primary-orange">Featured Project: Sports Pass</h2>
-                <p class="text-lg text-text-gray mb-6">
+            <div class="lg:w-1/2 scroll-animate slide-in-left">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4" style="color: var(--color-primary-orange);">Featured Project: Sports Pass</h2>
+                <p class="text-lg mb-6" style="color: var(--secondary-text-color);">
                     Sports Pass is our flagship fitness-tech solution, designed to revolutionize access to gyms and sports facilities. It's a unified digital pass simplifying membership management and connecting users to a vast network of fitness opportunities.
                 </p>
-                <a href="sports-pass.html" class="inline-block px-8 py-4 bg-primary-orange text-dark-bg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                <a href="sports-pass.html" class="inline-block px-8 py-4 font-bold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 animate-glowButton" style="animation-delay: 0.2s; background-color: var(--color-primary-orange); color: var(--color-dark-bg);">
                     Explore Sports Pass &rarr;
                 </a>
             </div>
-            <div class="lg:w-1/2 flex justify-center scroll-animate" style="animation-delay: 0.2s;">
+            <div class="lg:w-1/2 flex justify-center scroll-animate slide-in-right" style="animation-delay: 0.3s;">
                 <!-- Placeholder for Sports Pass Teaser Image/Mockup -->
                 <img src="https://placehold.co/600x400/2fb563/ffffff?text=Sports+Pass+Teaser" alt="Sports Pass Teaser" class="rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-500">
             </div>
         </div>
     </section>
 
-    <!-- About Us Section -->
-    <section id="about-us" class="py-20 bg-accent-dark">
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20" style="background-color: var(--accent-bg-color);">
         <div class="container mx-auto px-6 lg:px-8 max-w-7xl text-center">
-            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-primary-green scroll-animate">About Unstack Studio</h2>
-            <p class="text-lg text-text-gray mb-12 scroll-animate">Driven by passion, built on innovation.</p>
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 scroll-animate" style="color: var(--color-primary-green);">What Our Clients Say</h2>
+            <p class="text-lg text-center mb-16 scroll-animate delay-100" style="color: var(--secondary-text-color);">Hear from those who've experienced the Unstack Studio difference.</p>
             
-            <div class="max-w-3xl mx-auto scroll-animate">
-                <img src="The next stop for your online business is here..png" alt="Mohammad Umar Sajid" class="rounded-full w-36 h-36 mx-auto mb-6 border-4 border-primary-orange shadow-lg animate-pulseGreen">
-                <h3 class="text-3xl font-semibold mb-4 text-white">Mohammad Umar Sajid, Founder</h3>
-                <p class="text-lg text-text-gray leading-relaxed">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial Card 1 -->
+                <div class="p-8 rounded-xl shadow-lg border scroll-animate scale-in delay-200" style="background-color: var(--bg-color); border-color: var(--border-color);">
+                    <p class="text-lg mb-6 italic" style="color: var(--secondary-text-color);">"Unstack Studio transformed our game concept into a stunning reality. Their attention to detail and creative solutions were exceptional!"</p>
+                    <div class="flex items-center justify-center">
+                        <img src="https://placehold.co/60x60/primary-green/white?text=JD" alt="Client Avatar" class="rounded-xl w-16 h-16 mr-4 border-2" style="border-color: var(--color-primary-orange);">
+                        <div>
+                            <p class="font-semibold" style="color: var(--text-color);">Jane Doe</p>
+                            <p class="text-sm" style="color: var(--secondary-text-color);">CEO, GameTech Inc.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonial Card 2 -->
+                <div class="p-8 rounded-xl shadow-lg border scroll-animate scale-in delay-300" style="background-color: var(--bg-color); border-color: var(--border-color);">
+                    <p class="text-lg mb-6 italic" style="color: var(--secondary-text-color);">"Our new mobile app is a hit, thanks to Unstack Studio's brilliant development team. Seamless, intuitive, and beautiful."</p>
+                    <div class="flex items-center justify-center">
+                        <img src="https://placehold.co/60x60/primary-orange/white?text=SM" alt="Client Avatar" class="rounded-xl w-16 h-16 mr-4 border-2" style="border-color: var(--color-primary-green);">
+                        <div>
+                            <p class="font-semibold" style="color: var(--text-color);">Sarah Miller</p>
+                            <p class="text-sm" style="color: var(--secondary-text-color);">Founder, InnovateNow</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonial Card 3 -->
+                <div class="p-8 rounded-xl shadow-lg border scroll-animate scale-in delay-400" style="background-color: var(--bg-color); border-color: var(--border-color);">
+                    <p class="text-lg mb-6 italic" style="color: var(--secondary-text-color);">"The branding work done by Unstack Studio gave our company a fresh, modern identity. Highly recommend their design expertise!"</p>
+                    <div class="flex items-center justify-center">
+                        <img src="https://placehold.co/60x60/white/dark-bg?text=AW" alt="Client Avatar" class="rounded-xl w-16 h-16 mr-4 border-2" style="border-color: var(--color-primary-orange);">
+                        <div>
+                            <p class="font-semibold" style="color: var(--text-color);">Alex Wong</p>
+                            <p class="text-sm" style="color: var(--secondary-text-color);">Marketing Director, Global Brands</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about-us" class="py-20" style="background-color: var(--bg-color);">
+        <div class="container mx-auto px-6 lg:px-8 max-w-7xl text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 scroll-animate" style="color: var(--color-primary-green);">About Unstack Studio</h2>
+            <p class="text-lg mb-12 scroll-animate delay-100" style="color: var(--secondary-text-color);">Driven by passion, built on innovation.</p>
+            
+            <div class="max-w-3xl mx-auto scroll-animate scale-in delay-200">
+                <img src="https://placehold.co/150x150/ffae34/0a0a0a?text=Umar" alt="Mohammad Umar Sajid" class="rounded-xl w-36 h-36 mx-auto mb-6 border-4 border-primary-orange shadow-lg animate-pulseGreen">
+                <h3 class="text-3xl font-semibold mb-4" style="color: var(--text-color);">Mohammad Umar Sajid, Founder</h3>
+                <p class="text-lg leading-relaxed" style="color: var(--secondary-text-color);">
                     "As a Computer Game Developer, I founded Unstack Studio with a singular vision: to transform ambitious ideas into impactful digital realities. My background in crafting intricate game worlds fuels our creative approach to every project, whether it's a mobile app, a web platform, or a groundbreaking brand identity. We're not just building software; we're building dreams, one innovative solution at a time. Join us on this exciting journey to unstack the impossible."
                 </p>
             </div>
         </div>
     </section>
 
+    <!-- Call to Action Section -->
+    <section id="contact-cta" class="py-20" style="background-color: var(--color-primary-green); color: var(--color-dark-bg);">
+        <div class="container mx-auto px-6 lg:px-8 max-w-4xl scroll-animate scale-in">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Unstack Your Next Big Idea?</h2>
+            <p class="text-xl md:text-2xl mb-10 opacity-90">
+                Let's collaborate and build something extraordinary together.
+            </p>
+            <a href="#contact" class="inline-block px-10 py-5 font-bold rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 animate-glowButton-orange" style="background-color: var(--color-dark-bg); color: var(--color-primary-green);">
+                Get a Free Consultation
+            </a>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="bg-dark-bg py-10 border-t border-accent-dark text-center">
+    <footer class="py-10 border-t text-center" style="background-color: var(--bg-color); border-color: var(--border-color);">
         <div class="container mx-auto px-6 lg:px-8 max-w-7xl">
-            <p class="text-text-gray mb-6">&copy; 2025 Unstack Studio. All rights reserved.</p>
+            <p class="mb-6" style="color: var(--secondary-text-color);">&copy; 2025 Unstack Studio. All rights reserved.</p>
             <div class="flex justify-center space-x-6">
-                <a href="#" class="text-primary-green hover:text-white transition-colors duration-300 text-2xl" aria-label="GitHub">
+                <a href="#" class="transition-colors duration-300 text-2xl" aria-label="GitHub" style="color: var(--color-primary-green); hover:color: var(--text-color);">
                     <!-- GitHub Icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2V11a6 6 0 0 0-1.5-3.8c-.7-.7-1.5-1-2.5-1.2h-.5A7.5 7.5 0 0 0 5 11v3.8a4.8 4.8 0 0 0-1 3.2v4"></path><path d="M17 12c-1.5 0-3-.5-4-1.5V11a6 6 0 0 0-1.5-3.8c-.7-.7-1.5-1-2.5-1.2h-.5A7.5 7.5 0 0 0 5 11v3.8a4.8 4.8 0 0 0-1 3.2v4"></path><path d="M9 18c-2.5 0-5-1.2-5-3s2.5-3 5-3 5 1.2 5 3-2.5 3-5 3z"></path><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.8 8.1 6.7 9.4.5.1.7-.2.7-.4v-1.9c-2.8.6-3.4-1.4-3.4-1.4-.5-1.3-1.2-1.6-1.2-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1.9 1.6 2.3 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.2-4.5-1.1-4.5-5 0-1.1.4-2 1-2.7-.1-.2-.4-1.3.1-2.7 0 0 .9-.3 2.8 1.1.8-.2 1.6-.3 2.4-.3.8 0 1.6.1 2.4.3 1.9-1.4 2.8-1.1 2.8-1.1.5 1.4.2 2.5.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.8-4.5 5 .4.4.8 1.1.8 2.2v3.3c0 .2.2.5.7.4C20.2 20.1 22 16.4 22 12 22 6.5 17.5 2 12 2z"></path></svg>
                 </a>
-                <a href="#" class="text-primary-green hover:text-white transition-colors duration-300 text-2xl" aria-label="LinkedIn">
+                <a href="#" class="transition-colors duration-300 text-2xl" aria-label="LinkedIn" style="color: var(--color-primary-green); hover:color: var(--text-color);">
                     <!-- LinkedIn Icon SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                 </a>
@@ -228,87 +444,202 @@
     </footer>
 
     <script>
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+        // Function to set the theme
+        function setTheme(theme) {
+            const body = document.body;
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
 
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Close mobile menu when a link is clicked
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-            });
-        });
-
-        // Scroll animations using Intersection Observer
-        const observerOptions = {
-            threshold: 0.1, // Trigger when 10% of the element is visible
-            rootMargin: '0px 0px -50px 0px' // Adjust trigger point
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    // Optional: Unobserve after animation to prevent re-triggering
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.scroll-animate').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Dynamic background particles
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            
-            const size = Math.random() * 3 + 1; // Size between 1px and 4px
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            
-            const startX = Math.random() * window.innerWidth;
-            particle.style.left = `${startX}px`;
-            particle.style.top = `-10px`; // Start above the viewport
-            
-            const duration = Math.random() * 4000 + 3000; // Duration between 3s and 7s
-            particle.style.setProperty('--duration', `${duration}ms`);
-
-            document.body.appendChild(particle);
-            
-            const animation = particle.animate([
-                { transform: `translateY(0px) translateX(0px)`, opacity: 0.3 },
-                { transform: `translateY(${window.innerHeight + 20}px) translateX(${(Math.random() - 0.5) * 100}px)`, opacity: 0 }
-            ], {
-                duration: duration,
-                easing: 'ease-out',
-                fill: 'forwards'
-            });
-            
-            animation.onfinish = () => particle.remove();
+            if (theme === 'light') {
+                body.classList.add('light-mode');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                body.classList.remove('light-mode');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+            localStorage.setItem('theme', theme); // Save preference
         }
 
-        // Create particles periodically
-        setInterval(createParticle, 500); // Create a new particle every 500ms
+        // Initialize theme based on local storage or system preference
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                setTheme('light'); // Default to light if system prefers it
+            } else {
+                setTheme('dark'); // Default to dark
+            }
+
+            // Theme toggle button event listener
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            themeToggleBtn.addEventListener('click', () => {
+                const currentTheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+                setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Close mobile menu when a link is clicked
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // Scroll animations using Intersection Observer
+            const observerOptions = {
+                threshold: 0.1, // Trigger when 10% of the element is visible
+                rootMargin: '0px 0px -50px 0px' // Adjust trigger point
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    } else {
+                        // Optional: Remove 'active' class when element scrolls out of view
+                        // entry.target.classList.remove('active');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.scroll-animate').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Dynamic background particles - now thematic SVG based
+            function createParticle() {
+                const particleContainer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                particleContainer.classList.add('particle-svg');
+                
+                const size = Math.random() * 8 + 4; // Size between 4px and 12px for SVG
+                particleContainer.setAttribute('width', size);
+                particleContainer.setAttribute('height', size);
+                particleContainer.setAttribute('viewBox', '0 0 100 100');
+                particleContainer.setAttribute('aria-hidden', 'true');
+                
+                const shapeType = Math.floor(Math.random() * 3); // 0: network-node, 1: network-line, 2: network-grid
+                let shapeElement;
+                if (shapeType === 0) {
+                    shapeElement = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    shapeElement.setAttribute('x', '25'); shapeElement.setAttribute('y', '25'); shapeElement.setAttribute('width', '50'); shapeElement.setAttribute('height', '50'); shapeElement.setAttribute('rx', '10'); shapeElement.setAttribute('ry', '10');
+                    shapeElement.setAttribute('fill', 'currentColor');
+                } else if (shapeType === 1) {
+                    shapeElement = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    shapeElement.setAttribute('x1', '10'); shapeElement.setAttribute('y1', '50'); shapeElement.setAttribute('x2', '90'); shapeElement.setAttribute('y2', '50'); shapeElement.setAttribute('stroke', 'currentColor'); shapeElement.setAttribute('stroke-width', '10');
+                    shapeElement.setAttribute('stroke-linecap', 'round');
+                } else {
+                    shapeElement = document.createElementNS("http://www.w3.org/2000/svg", "g"); // Group for grid
+                    for (let i = 0; i < 3; i++) {
+                        for (let j = 0; j < 3; j++) {
+                            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                            rect.setAttribute('x', 10 + j * 30);
+                            rect.setAttribute('y', 10 + i * 30);
+                            rect.setAttribute('width', '15');
+                            rect.setAttribute('height', '15');
+                            rect.setAttribute('fill', 'currentColor');
+                            shapeElement.appendChild(rect);
+                        }
+                    }
+                }
+                particleContainer.appendChild(shapeElement);
+
+                const startX = Math.random() * window.innerWidth;
+                particleContainer.style.left = `${startX}px`;
+                particleContainer.style.top = `-20px`; // Start above the viewport
+                
+                const duration = Math.random() * 4000 + 3000; // Duration between 3s and 7s
+                particleContainer.style.setProperty('--duration', `${duration}ms`);
+
+                document.body.appendChild(particleContainer);
+                
+                const animation = particleContainer.animate([
+                    { transform: `translateY(0px) translateX(0px)`, opacity: 0.3 },
+                    { transform: `translateY(${window.innerHeight + 20}px) translateX(${(Math.random() - 0.5) * 100}px)`, opacity: 0 }
+                ], {
+                    duration: duration,
+                    easing: 'ease-out',
+                    fill: 'forwards'
+                });
+                
+                animation.onfinish = () => particleContainer.remove();
+            }
+
+            // Create particles periodically
+            setInterval(createParticle, 500); // Create a new particle every 500ms
+
+            // Parallax effect for floating elements in hero section
+            document.addEventListener('mousemove', (e) => {
+                const parallaxElements = document.querySelectorAll('.parallax-float');
+                parallaxElements.forEach(el => {
+                    const strength = parseFloat(el.getAttribute('data-parallax-strength'));
+                    const x = (e.clientX - window.innerWidth / 2) * strength;
+                    const y = (e.clientY - window.innerHeight / 2) * strength;
+                    // Get current transform to preserve existing animations like 'float'
+                    const currentTransform = el.style.transform;
+                    const floatTransformMatch = currentTransform.match(/translateY\(([^)]+)\) rotate\(([^)]+)\)/);
+                    let floatTransform = '';
+                    if (floatTransformMatch) {
+                        floatTransform = `translateY(${floatTransformMatch[1]}) rotate(${floatTransformMatch[2]})`;
+                    }
+
+                    el.style.transform = `translate(${x}px, ${y}px) ${floatTransform}`;
+                });
+            });
+
+            // Initialize Tone.js and create a synth for button clicks
+            let clickSynth;
+            // Ensure Tone.js context is started on first user interaction
+            document.documentElement.addEventListener('mousedown', () => {
+                if (Tone.context.state !== 'running') {
+                    Tone.start();
+                }
+            });
+
+            // Create a simple synth for click sounds
+            clickSynth = new Tone.Synth({
+                oscillator: {
+                    type: "sine" // A clean sine wave for a subtle click
+                },
+                envelope: {
+                    attack: 0.001,
+                    decay: 0.05,
+                    sustain: 0.0,
+                    release: 0.05
+                }
+            }).toDestination();
+
+            // Add click sound to all buttons and anchor tags that act as buttons
+            document.querySelectorAll('button, a.inline-block').forEach(element => {
+                element.addEventListener('click', () => {
+                    // Play a short note (e.g., C5) when clicked
+                    clickSynth.triggerAttackRelease("C5", "8n");
+                });
+            });
+        });
     </script>
 </body>
 </html>
