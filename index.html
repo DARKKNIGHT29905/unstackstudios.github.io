@@ -3,858 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unstack Studios - Games • Design • Apps</title>
+    <title>Unstack Studio - Building Games, Apps, Brands & Big Ideas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-green': '#2fb563',
+                        'primary-orange': '#ffae34',
+                        'white': '#ffffff',
+                        'dark-bg': '#0a0a0a',
+                        'accent-dark': '#1a1a1a',
+                        'text-gray': '#a0a0a0',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-20px) rotate(180deg)' },
+                        },
+                        pulseGreen: {
+                            '0%, 100%': { 'box-shadow': '0 0 0 0 rgba(47, 181, 99, 0.7)' },
+                            '50%': { 'box-shadow': '0 0 0 10px rgba(47, 181, 99, 0)' },
+                        },
+                        particleFall: {
+                            '0%': { transform: 'translateY(0px)', opacity: '0.3' },
+                            '100%': { transform: 'translateY(100vh)', opacity: '0' },
+                        }
+                    },
+                    animation: {
+                        fadeInUp: 'fadeInUp 1s ease-out forwards',
+                        float: 'float 6s ease-in-out infinite',
+                        pulseGreen: 'pulseGreen 2s infinite',
+                        particleFall: 'particleFall var(--duration) ease-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-green: #4CAF50;
-            --secondary-orange: #FF9800;
-            --dark-bg: #2C2C2C;
-            --white: #FFFFFF;
-            --light-gray: #F5F5F5;
-        }
-
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a4d1a 50%, #2d5a2d 100%);
-            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a; /* dark-bg */
+            color: #ffffff; /* white */
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
-        /* Animated Background */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.1;
-        }
-
-        .floating-shapes {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        .shape {
-            position: absolute;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            animation: float 25s infinite linear;
-        }
-
-        .shape:nth-child(1) { 
-            width: 80px; height: 80px; left: 10%; animation-delay: 0s;
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-        }
-        .shape:nth-child(2) { 
-            width: 120px; height: 120px; left: 80%; animation-delay: 6s;
-            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-        }
-        .shape:nth-child(3) { 
-            width: 60px; height: 60px; left: 50%; animation-delay: 12s;
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-        }
-        .shape:nth-child(4) { 
-            width: 100px; height: 100px; left: 20%; animation-delay: 18s;
-            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
-        }
-        .shape:nth-child(5) { 
-            width: 90px; height: 90px; left: 70%; animation-delay: 3s;
-            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-        }
-        .shape:nth-child(6) { 
-            width: 70px; height: 70px; left: 35%; animation-delay: 9s;
-            border-radius: 50%;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-        }
-
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 20px 50px;
-            background: rgba(44, 44, 44, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            transition: all 0.3s ease;
-            border-bottom: 2px solid var(--primary-green);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { filter: drop-shadow(0 0 5px var(--primary-green)); }
-            to { filter: drop-shadow(0 0 20px var(--secondary-orange)); }
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-green);
-            transform: translateY(-2px);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange), var(--white));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: textShine 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes textShine {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(45deg); }
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            color: var(--light-gray);
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 15px 40px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(76, 175, 80, 0.4);
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .cta-button:hover::before {
-            left: 100%;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Services Section */
-        .services {
-            padding: 100px 50px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .services h2 {
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 60px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-
-        .service-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(76, 175, 80, 0.3);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(76, 175, 80, 0.2);
-            border-color: var(--primary-green);
-            background: rgba(76, 175, 80, 0.1);
-        }
-
-        .service-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--white);
-        }
-
-        .service-card p {
-            opacity: 0.8;
-            line-height: 1.6;
-            color: var(--light-gray);
-        }
-
-        /* Sport Pass Showcase */
-        .showcase {
-            padding: 100px 50px;
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(255, 152, 0, 0.1));
-            text-align: center;
-        }
-
-        .showcase h2 {
-            font-size: 3rem;
-            margin-bottom: 30px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .showcase-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .showcase p {
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            opacity: 0.9;
-            color: var(--light-gray);
-        }
-
-        .sport-pass-demo {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--primary-green);
-            border-radius: 20px;
-            padding: 60px;
-            margin: 40px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sport-pass-demo::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, var(--primary-green), transparent, var(--secondary-orange), transparent);
-            animation: rotate 10s linear infinite;
-            opacity: 0.1;
-        }
-
-        @keyframes rotate {
-            100% { transform: rotate(360deg); }
-        }
-
-        .demo-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .feature {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--primary-green);
-            padding: 20px;
-            border-radius: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .feature:hover {
-            transform: scale(1.05);
-            background: rgba(76, 175, 80, 0.1);
-            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.2);
-        }
-
-        .learn-more-btn {
-            display: inline-block;
-            padding: 15px 30px;
-            background: linear-gradient(45deg, var(--secondary-orange), var(--primary-green));
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            margin: 20px;
-            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3);
-        }
-
-        .learn-more-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(255, 152, 0, 0.4);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--dark-bg);
-            padding: 50px;
-            text-align: center;
-            border-top: 2px solid var(--primary-green);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-
-        .footer-links a {
-            color: var(--white);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-green);
-        }
-
-        /* Scroll Animations */
-        .fade-in {
+        /* Custom scroll-animate class for JS controlled animations */
+        .scroll-animate {
             opacity: 0;
             transform: translateY(50px);
-            transition: all 0.6s ease;
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
-        .fade-in.visible {
+        .scroll-animate.active {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Sport Pass Detail Page */
-        .sport-pass-page {
-            display: none;
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a4d1a 50%, #2d5a2d 100%);
+        /* Specific styles for gradient text */
+        .gradient-text-green-white {
+            background: linear-gradient(135deg, var(--tw-colors-primary-green), var(--tw-colors-white));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .sport-pass-page.active {
-            display: block;
-        }
-
-        .back-btn {
+        /* Particle animation styling */
+        .particle {
             position: fixed;
-            top: 100px;
-            left: 50px;
-            padding: 12px 25px;
-            background: rgba(76, 175, 80, 0.9);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--primary-green);
-            border-radius: 25px;
-            color: var(--white);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            font-weight: bold;
-        }
-
-        .back-btn:hover {
-            background: var(--primary-green);
-            transform: translateX(-5px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
-        }
-
-        .sport-hero {
-            text-align: center;
-            padding: 150px 50px 100px;
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(255, 152, 0, 0.2));
-        }
-
-        .sport-hero h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: textShine 3s ease-in-out infinite alternate;
-        }
-
-        .sport-hero p {
-            font-size: 1.4rem;
-            color: var(--light-gray);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .features-section {
-            padding: 100px 50px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .features-section h2 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 60px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-            margin-bottom: 80px;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(76, 175, 80, 0.3);
-            border-radius: 20px;
-            padding: 40px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary-green);
-            box-shadow: 0 20px 40px rgba(76, 175, 80, 0.2);
-        }
-
-        .feature-card .icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--white);
-        }
-
-        .feature-card p {
-            color: var(--light-gray);
-            line-height: 1.6;
-        }
-
-        .register-section {
-            text-align: center;
-            padding: 100px 50px;
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(255, 152, 0, 0.1));
-        }
-
-        .register-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .register-section p {
-            font-size: 1.2rem;
-            color: var(--light-gray);
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .register-btn {
-            display: inline-block;
-            padding: 20px 50px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .register-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(76, 175, 80, 0.4);
-        }
-
-        .register-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .register-btn:hover::before {
-            left: 100%;
-        }
-
-        .about-sport-pass {
-            padding: 100px 50px;
-            max-width: 1000px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .about-sport-pass h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .about-sport-pass p {
-            font-size: 1.1rem;
-            color: var(--light-gray);
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1, .sport-hero h1 { font-size: 2.5rem; }
-            .services, .showcase, .features-section { padding: 50px 20px; }
-            .nav-links { display: none; }
-            header { padding: 15px 20px; }
-            .back-btn { left: 20px; }
-            .features-grid { grid-template-columns: 1fr; }
+            width: 2px;
+            height: 2px;
+            background-color: var(--tw-colors-primary-green);
+            border-radius: 50%;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 1;
         }
     </style>
 </head>
-<body>
-    <!-- Animated Background -->
-    <div class="bg-animation">
-        <div class="floating-shapes">
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
+<body class="bg-dark-bg text-white font-inter">
+
+    <!-- Header -->
+    <header class="fixed top-0 w-full bg-dark-bg bg-opacity-95 backdrop-blur-xl z-50 transition-all duration-300 ease-in-out py-4 shadow-lg">
+        <nav class="container mx-auto flex justify-between items-center px-6 lg:px-8 max-w-7xl">
+            <a href="index.html" class="text-3xl font-extrabold text-primary-green transition-transform duration-300 hover:scale-105">Unstack Studio</a>
+            <ul class="hidden md:flex space-x-8">
+                <li><a href="#home" class="text-white hover:text-primary-green font-medium relative group">Home<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-green transition-all duration-300 group-hover:w-full"></span></a></li>
+                <li><a href="#services" class="text-white hover:text-primary-green font-medium relative group">Our Work<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-green transition-all duration-300 group-hover:w-full"></span></a></li>
+                <li><a href="sports-pass.html" class="text-white hover:text-primary-orange font-medium relative group">Sports Pass<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-orange transition-all duration-300 group-hover:w-full"></span></a></li>
+            </ul>
+            <!-- Mobile Menu Button (Hamburger) -->
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-bg bg-opacity-90 py-4">
+            <ul class="flex flex-col items-center space-y-4">
+                <li><a href="#home" class="text-white hover:text-primary-green font-medium text-lg py-2 block">Home</a></li>
+                <li><a href="#services" class="text-white hover:text-primary-green font-medium text-lg py-2 block">Our Work</a></li>
+                <li><a href="sports-pass.html" class="text-white hover:text-primary-orange font-medium text-lg py-2 block">Sports Pass</a></li>
+            </ul>
         </div>
-    </div>
+    </header>
 
-    <!-- Main Website -->
-    <div id="main-site">
-        <!-- Header -->
-        <header>
-            <nav>
-                <div class="logo">UNSTACK STUDIOS</div>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#showcase">Projects</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-        </header>
-
-        <!-- Hero Section -->
-        <section id="home" class="hero">
-            <div class="hero-content">
-                <h1>UNSTACK STUDIOS</h1>
-                <p>Crafting Digital Experiences Through Games, Design & Innovation</p>
-                <a href="#services" class="cta-button">Explore Our Work</a>
-            </div>
-        </section>
-
-        <!-- Services Section -->
-        <section id="services" class="services fade-in">
-            <h2>Our Services</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">🎮</div>
-                    <h3>Game Development</h3>
-                    <p>Creating immersive gaming experiences with cutting-edge technology and innovative gameplay mechanics that captivate players worldwide.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">🎨</div>
-                    <h3>Graphic Design</h3>
-                    <p>Visual storytelling through stunning graphics, branding, and creative design solutions that make lasting impressions.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">📱</div>
-                    <h3>UI/UX Design</h3>
-                    <p>User-centered design approaches that create intuitive and engaging digital interfaces for optimal user experience.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">⚡</div>
-                    <h3>App Development</h3>
-                    <p>Building powerful mobile and web applications that connect users and drive business growth through innovative technology.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Showcase Section -->
-        <section id="showcase" class="showcase fade-in">
-            <h2>Featured Project: Sport Pass</h2>
-            <div class="showcase-content">
-                <p>Our unified digital access solution for gyms, sports facilities, and fitness events nationwide.</p>
-                
-                <div class="sport-pass-demo">
-                    <h3>About the Project</h3>
-                    <p style="margin-bottom: 30px; font-size: 1.1rem; line-height: 1.7;">Our Sports Pass is a unified digital access solution for gyms, sports facilities, and fitness events nationwide. It simplifies membership management and connects users to a growing network of fitness opportunities — all through one smart pass.</p>
-                    <p style="margin-bottom: 40px; font-size: 1.1rem; line-height: 1.7;">We're building a seamless experience for both fitness enthusiasts and facility owners, making fitness more accessible and manageable than ever before.</p>
-                    <div class="demo-features">
-                        <div class="feature">
-                            <h4>🏟️ Unified Access</h4>
-                            <p>One pass for all facilities nationwide</p>
-                        </div>
-                        <div class="feature">
-                            <h4>📅 Smart Management</h4>
-                            <p>Simplified membership and booking system</p>
-                        </div>
-                        <div class="feature">
-                            <h4>👥 Growing Network</h4>
-                            <p>Connect to fitness opportunities everywhere</p>
-                        </div>
-                        <div class="feature">
-                            <h4>📊 Seamless Experience</h4>
-                            <p>For both users and facility owners</p>
-                        </div>
-                    </div>
-                    <a href="#" class="learn-more-btn" onclick="showSportPassPage()">Explore Sport Pass Details</a>
-                    <a href="#" class="learn-more-btn" onclick="showAboutSportPassPage()" style="background: linear-gradient(45deg, var(--primary-green), var(--secondary-orange));">Learn More About Sport Pass</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer id="contact">
-            <div class="footer-content">
-                <div class="footer-links">
-                    <a href="#home">Home</a>
-                    <a href="#services">Services</a>
-                    <a href="#showcase">Projects</a>
-                    <a href="mailto:contact@unstackstudios.com">Contact</a>
-                </div>
-                <p>&copy; 2025 Unstack Studios. All rights reserved.</p>
-            </div>
-        </footer>
-    </div>
-
-    <!-- Sport Pass Detail Page -->
-    <div id="sport-pass-page" class="sport-pass-page">
-        <a href="#" class="back-btn" onclick="showMainSite()">&larr; Back to Main Site</a>
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center bg-gradient-to-br from-dark-bg to-accent-dark overflow-hidden">
+        <!-- Floating Elements for Animation -->
+        <div class="absolute top-1/4 left-1/4 w-24 h-24 bg-primary-green rounded-full opacity-10 animate-float" style="animation-delay: 0s;"></div>
+        <div class="absolute bottom-1/3 right-1/4 w-32 h-32 bg-primary-orange rounded-full opacity-10 animate-float" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/2 left-1/2 w-20 h-20 bg-white rounded-full opacity-5 animate-float" style="animation-delay: 4s;"></div>
         
-        <div class="sport-hero">
-            <h1>Sport Pass</h1>
-            <p>The unified digital access solution connecting fitness enthusiasts to gyms, sports facilities, and fitness events nationwide through one smart pass</p>
+        <div class="z-10 text-center max-w-4xl px-6">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-4 gradient-text-green-white animate-fadeInUp" style="animation-delay: 0.2s;">Welcome to Unstack Studio</h1>
+            <p class="text-xl md:text-2xl text-text-gray mb-8 animate-fadeInUp" style="animation-delay: 0.4s;">Building Games, Apps, Brands & Big Ideas.</p>
+            <a href="#services" class="inline-block px-8 py-4 bg-primary-green text-dark-bg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 animate-fadeInUp" style="animation-delay: 0.6s;">
+                Explore Our Services
+            </a>
         </div>
+    </section>
 
-        <div class="about-sport-pass">
-            <h2>About Sport Pass</h2>
-            <p>Our Sports Pass is a unified digital access solution for gyms, sports facilities, and fitness events nationwide. It simplifies membership management and connects users to a growing network of fitness opportunities — all through one smart pass.</p>
-            <p>We're building a seamless experience for both fitness enthusiasts and facility owners, making fitness more accessible and manageable than ever before.</p>
-        </div>
-
-        <div class="features-section">
-            <h2>Key Features & Benefits</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="icon">🏟️</div>
-                    <h3>Comprehensive Venue Management</h3>
-                    <p>Manage multiple facilities, courts, and equipment from a single dashboard. Track maintenance schedules, monitor facility usage, and optimize resource allocation with our intelligent management system.</p>
+    <!-- Our Services Section -->
+    <section id="services" class="py-20 bg-accent-dark">
+        <div class="container mx-auto px-6 lg:px-8 max-w-7xl">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 text-primary-green scroll-animate">Our Services</h2>
+            <p class="text-lg text-center text-text-gray mb-16 scroll-animate">Crafting digital experiences that stand out.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Service Card 1: Game Development -->
+                <div class="bg-dark-bg p-8 rounded-xl shadow-lg border border-primary-green border-opacity-20 hover:border-opacity-80 transition-all duration-300 transform hover:-translate-y-2 scroll-animate">
+                    <div class="text-4xl mb-4 text-primary-orange">🎮</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-white">Game Development</h3>
+                    <p class="text-text-gray">From concept to launch, we create immersive and engaging games for various platforms.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="icon">📅</div>
-                    <h3>Advanced Booking System</h3>
-                    <p>Smart scheduling engine that prevents double bookings, optimizes time slots, and allows customers to book facilities 24/7. Automated confirmations and reminders keep everyone informed.</p>
+                
+                <!-- Service Card 2: Mobile & Web App Development -->
+                <div class="bg-dark-bg p-8 rounded-xl shadow-lg border border-primary-green border-opacity-20 hover:border-opacity-80 transition-all duration-300 transform hover:-translate-y-2 scroll-animate" style="animation-delay: 0.1s;">
+                    <div class="text-4xl mb-4 text-primary-orange">📱</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-white">Mobile & Web App Development</h3>
+                    <p class="text-text-gray">Building intuitive, high-performance applications for iOS, Android, and the web.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="icon">💳</div>
-                    <h3>Integrated Payment Processing</h3>
-                    <p>Secure payment gateway supporting multiple payment methods. Automated billing, membership management, and financial reporting make revenue tracking effortless.</p>
+                
+                <!-- Service Card 3: Graphic Design -->
+                <div class="bg-dark-bg p-8 rounded-xl shadow-lg border border-primary-green border-opacity-20 hover:border-opacity-80 transition-all duration-300 transform hover:-translate-y-2 scroll-animate" style="animation-delay: 0.2s;">
+                    <div class="text-4xl mb-4 text-primary-orange">🎨</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-white">Graphic Design</h3>
+                    <p class="text-text-gray">Stunning visual identities, UI/UX design, and branding that captures attention.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="icon">👥</div>
-                    <h3>Customer Management Portal</h3>
-                    <p>Comprehensive user profiles, booking history, loyalty programs, and personalized recommendations. Build stronger relationships with your customers through data-driven insights.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">📊</div>
-                    <h3>Real-time Analytics & Reporting</h3>
-                    <p>Detailed insights into facility usage, peak hours, revenue trends, and customer behavior. Make informed decisions with our comprehensive analytics dashboard.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">📱</div>
-                    <h3>Mobile-First Experience</h3>
-                    <p>Responsive design ensures seamless experience across all devices. Native mobile apps for both facility managers and customers coming soon.</p>
+                
+                <!-- Service Card 4: AR/VR (Coming Soon) -->
+                <div class="bg-dark-bg p-8 rounded-xl shadow-lg border border-primary-green border-opacity-20 hover:border-opacity-80 transition-all duration-300 transform hover:-translate-y-2 scroll-animate" style="animation-delay: 0.3s;">
+                    <div class="text-4xl mb-4 text-primary-orange">🕶️</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-white">AR/VR (Coming Soon)</h3>
+                    <p class="text-text-gray">Exploring the future of immersive experiences with augmented and virtual reality solutions.</p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="register-section">
-            <h2>Ready to Transform Your Sports Facility?</h2>
-            <p>Join Sport Pass today and discover how our platform can revolutionize your facility management, increase bookings, and enhance customer satisfaction. Get started with our comprehensive onboarding process.</p>
-            <a href="#" class="register-btn" id="register-owner-btn">Register as Facility Owner</a>
-            <p style="margin-top: 30px; opacity: 0.7; font-size: 0.9rem;">*Registration will connect you with our onboarding team to customize Sport Pass for your specific needs</p>
+    <!-- Featured Project Section: Sports Pass -->
+    <section id="featured-project" class="py-20 bg-dark-bg">
+        <div class="container mx-auto px-6 lg:px-8 max-w-7xl flex flex-col lg:flex-row items-center gap-12">
+            <div class="lg:w-1/2 scroll-animate">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-primary-orange">Featured Project: Sports Pass</h2>
+                <p class="text-lg text-text-gray mb-6">
+                    Sports Pass is our flagship fitness-tech solution, designed to revolutionize access to gyms and sports facilities. It's a unified digital pass simplifying membership management and connecting users to a vast network of fitness opportunities.
+                </p>
+                <a href="sports-pass.html" class="inline-block px-8 py-4 bg-primary-orange text-dark-bg font-bold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                    Explore Sports Pass &rarr;
+                </a>
+            </div>
+            <div class="lg:w-1/2 flex justify-center scroll-animate" style="animation-delay: 0.2s;">
+                <!-- Placeholder for Sports Pass Teaser Image/Mockup -->
+                <img src="https://placehold.co/600x400/2fb563/ffffff?text=Sports+Pass+Teaser" alt="Sports Pass Teaser" class="rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-500">
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about-us" class="py-20 bg-accent-dark">
+        <div class="container mx-auto px-6 lg:px-8 max-w-7xl text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-primary-green scroll-animate">About Unstack Studio</h2>
+            <p class="text-lg text-text-gray mb-12 scroll-animate">Driven by passion, built on innovation.</p>
+            
+            <div class="max-w-3xl mx-auto scroll-animate">
+                <img src="The next stop for your online business is here..png" alt="Mohammad Umar Sajid" class="rounded-full w-36 h-36 mx-auto mb-6 border-4 border-primary-orange shadow-lg animate-pulseGreen">
+                <h3 class="text-3xl font-semibold mb-4 text-white">Mohammad Umar Sajid, Founder</h3>
+                <p class="text-lg text-text-gray leading-relaxed">
+                    "As a Computer Game Developer, I founded Unstack Studio with a singular vision: to transform ambitious ideas into impactful digital realities. My background in crafting intricate game worlds fuels our creative approach to every project, whether it's a mobile app, a web platform, or a groundbreaking brand identity. We're not just building software; we're building dreams, one innovative solution at a time. Join us on this exciting journey to unstack the impossible."
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark-bg py-10 border-t border-accent-dark text-center">
+        <div class="container mx-auto px-6 lg:px-8 max-w-7xl">
+            <p class="text-text-gray mb-6">&copy; 2025 Unstack Studio. All rights reserved.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-primary-green hover:text-white transition-colors duration-300 text-2xl" aria-label="GitHub">
+                    <!-- GitHub Icon SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2V11a6 6 0 0 0-1.5-3.8c-.7-.7-1.5-1-2.5-1.2h-.5A7.5 7.5 0 0 0 5 11v3.8a4.8 4.8 0 0 0-1 3.2v4"></path><path d="M17 12c-1.5 0-3-.5-4-1.5V11a6 6 0 0 0-1.5-3.8c-.7-.7-1.5-1-2.5-1.2h-.5A7.5 7.5 0 0 0 5 11v3.8a4.8 4.8 0 0 0-1 3.2v4"></path><path d="M9 18c-2.5 0-5-1.2-5-3s2.5-3 5-3 5 1.2 5 3-2.5 3-5 3z"></path><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.8 8.1 6.7 9.4.5.1.7-.2.7-.4v-1.9c-2.8.6-3.4-1.4-3.4-1.4-.5-1.3-1.2-1.6-1.2-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1.9 1.6 2.3 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.2-4.5-1.1-4.5-5 0-1.1.4-2 1-2.7-.1-.2-.4-1.3.1-2.7 0 0 .9-.3 2.8 1.1.8-.2 1.6-.3 2.4-.3.8 0 1.6.1 2.4.3 1.9-1.4 2.8-1.1 2.8-1.1.5 1.4.2 2.5.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.8-4.5 5 .4.4.8 1.1.8 2.2v3.3c0 .2.2.5.7.4C20.2 20.1 22 16.4 22 12 22 6.5 17.5 2 12 2z"></path></svg>
+                </a>
+                <a href="#" class="text-primary-green hover:text-white transition-colors duration-300 text-2xl" aria-label="LinkedIn">
+                    <!-- LinkedIn Icon SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // Scroll animations
-        function animateOnScroll() {
-            const elements = document.querySelectorAll('.fade-in');
-            elements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const elementVisible = 150;
-                
-                if (elementTop < window.innerHeight - elementVisible) {
-                    element.classList.add('visible');
-                }
-            });
-        }
-
-        window.addEventListener('scroll', animateOnScroll);
-
-        // Page navigation
-        function showSportPassPage() {
-            document.getElementById('main-site').style.display = 'none';
-            document.getElementById('sport-pass-page').classList.add('active');
-            window.scrollTo(0, 0);
-        }
-
-        function showMainSite() {
-            document.getElementById('main-site').style.display = 'block';
-            document.getElementById('sport-pass-page').classList.remove('active');
-            window.scrollTo(0, 0);
-        }
-
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                if (this.getAttribute('href').startsWith('#')) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    }
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             });
         });
 
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(44, 44, 44, 0.98)';
-            } else {
-                header.style.background = 'rgba(44, 44, 44, 0.95)';
-            }
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
         });
 
-        // Initialize animations
-        animateOnScroll();
-
-        // Register button placeholder (you'll update this with your Google Form link)
-        document.getElementById('register-owner-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Google Form registration link will be added here. Please provide the link to connect it.');
+        // Close mobile menu when a link is clicked
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
         });
+
+        // Scroll animations using Intersection Observer
+        const observerOptions = {
+            threshold: 0.1, // Trigger when 10% of the element is visible
+            rootMargin: '0px 0px -50px 0px' // Adjust trigger point
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Optional: Unobserve after animation to prevent re-triggering
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Dynamic background particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            const size = Math.random() * 3 + 1; // Size between 1px and 4px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            const startX = Math.random() * window.innerWidth;
+            particle.style.left = `${startX}px`;
+            particle.style.top = `-10px`; // Start above the viewport
+            
+            const duration = Math.random() * 4000 + 3000; // Duration between 3s and 7s
+            particle.style.setProperty('--duration', `${duration}ms`);
+
+            document.body.appendChild(particle);
+            
+            const animation = particle.animate([
+                { transform: `translateY(0px) translateX(0px)`, opacity: 0.3 },
+                { transform: `translateY(${window.innerHeight + 20}px) translateX(${(Math.random() - 0.5) * 100}px)`, opacity: 0 }
+            ], {
+                duration: duration,
+                easing: 'ease-out',
+                fill: 'forwards'
+            });
+            
+            animation.onfinish = () => particle.remove();
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 500); // Create a new particle every 500ms
     </script>
 </body>
 </html>
